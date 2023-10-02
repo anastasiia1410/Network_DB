@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface Api {
 
-    @GET
+    @GET("api/")
     suspend fun getUsers() : Response
 }

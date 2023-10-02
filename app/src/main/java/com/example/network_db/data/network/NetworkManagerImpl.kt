@@ -23,7 +23,7 @@ class NetworkManagerImpl : NetworkManager {
             .build()
         gson = GsonBuilder().serializeNulls().create()
         retrofit = Retrofit.Builder()
-            .baseUrl("https://randomuser.me/api/")
+            .baseUrl("https://randomuser.me/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
