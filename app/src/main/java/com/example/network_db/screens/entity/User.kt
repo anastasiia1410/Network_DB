@@ -2,7 +2,7 @@ package com.example.network_db.screens.entity
 
 import com.example.network_db.screens.list.UserState
 
-data class User(val name : Name){
+data class User(val name : Name, val login : Login){
     companion object{
         fun initial() : UserState{
             return UserState(userList = emptyList())

@@ -2,6 +2,7 @@ package com.example.network_db.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +22,7 @@ abstract class BaseViewModel<Event, State>(
         val newState = reducer.reduce(event, state.value)
         _state.value = newState
         useCases.filter { it.canHandle(event) }.forEach {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 val result = it.invoke(event, newState)
                 handleEvent(result)
             }
