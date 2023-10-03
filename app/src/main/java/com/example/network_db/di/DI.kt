@@ -1,6 +1,10 @@
 package com.example.network_db.di
 
+import androidx.room.Room
 import com.example.network_db.core.App
+import com.example.network_db.data.db.AppDatabase
+import com.example.network_db.data.db.DatabaseRepository
+import com.example.network_db.data.db.DatabaseRepositoryImpl
 import com.example.network_db.data.network.Api
 import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.data.network.NetworkRepositoryImpl
@@ -17,6 +21,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private val appModule = module {
+    single { Room.databaseBuilder(get(), AppDatabase::class.java, "my_table.sqlite").build() }
     single { GsonBuilder().serializeNulls().create() }
     single {
         OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
@@ -32,7 +37,8 @@ private val appModule = module {
     }
     single { get<Retrofit>().create(Api::class.java) }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
-    single { GetUsersUseCase(get()) }
+    single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
+    single { GetUsersUseCase(get(), get()) }
     viewModel { UserViewModel(listOf(get<GetUsersUseCase>())) }
 }
 

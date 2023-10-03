@@ -24,14 +24,14 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.VH>(DiffCallback()) {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             with(binding) {
-                tvName.text = user.name.first
+                tvName.text = user.firstName
             }
         }
     }
 
     class DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem.name == newItem.name
+        override fun areItemsTheSame(oldUser: User, newUser: User): Boolean =
+            oldUser.firstName == newUser.firstName
 
         override fun areContentsTheSame(oldItem: User, newItem: User) =
             oldItem == newItem
