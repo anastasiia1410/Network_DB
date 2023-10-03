@@ -18,14 +18,13 @@ class GetUsersUseCase(
         return (event as? UserEvents.GetList)?.let {
             try {
                 val netUserList = networkRepository.getUsers()
-                databaseRepository.clearTable(databaseRepository.getUsers())
+                databaseRepository.clearTable()
                 databaseRepository.insert(netUserList)
                 return UserEvents.ShowList(netUserList)
             } catch (e: Exception) {
                 val dbUserList = databaseRepository.getUsers()
                 return UserEvents.ShowList(dbUserList)
             }
-
         } ?: UserEvents.Error("Wrong event type : $event")
     }
 }

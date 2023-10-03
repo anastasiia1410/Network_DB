@@ -7,6 +7,6 @@ interface DatabaseRepository {
 
     suspend fun getUsers(): List<User>
 
-    suspend fun clearTable(users: List<User>)
+    suspend fun clearTable()
 
 }

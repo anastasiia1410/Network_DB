@@ -1,8 +1,14 @@
 package com.example.network_db.data.network.entity
 
 import com.example.network_db.screens.entity.User
+import com.google.gson.annotations.SerializedName
 
-data class UserNetwork(val name: NameNetwork, val login: LoginNetwork)
+data class UserNetwork(
+    @SerializedName("name")
+    val name: NameNetwork,
+    @SerializedName("login")
+    val login: LoginNetwork,
+)
 
 fun UserNetwork.toUser(): User {
     return User(
@@ -13,6 +19,12 @@ fun UserNetwork.toUser(): User {
     )
 }
 
-data class NameNetwork(val title: String, val firstName: String, val lastName: String)
+data class NameNetwork(
+    @SerializedName("title")
+    val title: String,
+    @SerializedName("first")
+    val firstName: String,
+    @SerializedName("last")
+    val lastName: String)
 
-data class LoginNetwork(val uuid: String)
+data class LoginNetwork( @SerializedName("uuid") val uuid: String)

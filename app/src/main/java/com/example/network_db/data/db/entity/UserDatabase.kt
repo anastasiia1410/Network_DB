@@ -35,4 +35,3 @@ fun UserDatabase.toUser(): User {
     )
 }
 
-

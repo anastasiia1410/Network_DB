@@ -21,7 +21,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private val appModule = module {
-    single { Room.databaseBuilder(get(), AppDatabase::class.java, "my_table.sqlite").build() }
     single { GsonBuilder().serializeNulls().create() }
     single {
         OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
@@ -36,6 +35,10 @@ private val appModule = module {
             .build()
     }
     single { get<Retrofit>().create(Api::class.java) }
+    single {
+        val db = Room.databaseBuilder(get(), AppDatabase::class.java, "my_table.sqlite").build()
+        db.userDao()
+    }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single { GetUsersUseCase(get(), get()) }
