@@ -1,4 +1,4 @@
-package com.example.network_db.screens.list
+package com.example.network_db.screens.users
 
 import com.example.network_db.core.BaseViewModel
 import com.example.network_db.core.UseCase
@@ -8,7 +8,7 @@ class UserViewModel(useCase: List<UseCase<UserEvents, UserState>>) :
     BaseViewModel<UserEvents, UserState>(
         useCases = useCase,
         reducer = UserReducer(),
-        initialState = User.initial()
+        initialState = User.initialUsers()
     ) {
 
     fun getList() {

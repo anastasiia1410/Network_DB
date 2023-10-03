@@ -8,8 +8,10 @@ import com.example.network_db.data.db.DatabaseRepositoryImpl
 import com.example.network_db.data.network.Api
 import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.data.network.NetworkRepositoryImpl
-import com.example.network_db.screens.list.UserViewModel
-import com.example.network_db.screens.list.use_case.GetUsersUseCase
+import com.example.network_db.screens.detail_user.UserDetailViewModel
+import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
+import com.example.network_db.screens.users.UserViewModel
+import com.example.network_db.screens.users.use_case.GetUsersUseCase
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -42,7 +44,10 @@ private val appModule = module {
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single { GetUsersUseCase(get(), get()) }
+    single { GetDetailUserUseCase(get()) }
     viewModel { UserViewModel(listOf(get<GetUsersUseCase>())) }
+    viewModel { UserDetailViewModel(listOf(get<GetDetailUserUseCase>())) }
+
 }
 
 fun App.initKoin() {

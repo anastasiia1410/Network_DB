@@ -1,10 +1,10 @@
-package com.example.network_db.screens.list.use_case
+package com.example.network_db.screens.users.use_case
 
 import com.example.network_db.core.UseCase
 import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.data.network.NetworkRepository
-import com.example.network_db.screens.list.UserEvents
-import com.example.network_db.screens.list.UserState
+import com.example.network_db.screens.users.UserEvents
+import com.example.network_db.screens.users.UserState
 
 class GetUsersUseCase(
     private val networkRepository: NetworkRepository,

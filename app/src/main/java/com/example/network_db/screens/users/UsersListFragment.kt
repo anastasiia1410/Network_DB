@@ -1,4 +1,4 @@
-package com.example.network_db.screens.list
+package com.example.network_db.screens.users
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.network_db.core.BaseFragment
 import com.example.network_db.databinding.FragmentUserListBinding
@@ -28,13 +29,13 @@ class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding){
+        with(binding) {
             rvRecycler.layoutManager = LinearLayoutManager(requireContext())
             rvRecycler.adapter = adapter
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     adapter.submitList(state.userList)
                 }
@@ -42,5 +43,12 @@ class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
         }
 
         viewModel.getList()
+
+        adapter.onUserClick = {
+            val action = UsersListFragmentDirections.actionUsersListFragmentToUserDetailFragment(it)
+            findNavController().navigate(action)
+        }
+
+
     }
 }

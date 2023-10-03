@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
     app:startDestination="@id/usersListFragment">
 
     <fragment
         android:id="@+id/usersListFragment"
-        android:name="com.example.network_db.screens.list.UsersListFragment"
-        android:label="UsersListFragment" />
+        android:name="com.example.network_db.screens.users.UsersListFragment"
+        android:label="UsersListFragment"
+        tools:layout="@layout/fragment_user_list">
+        <action
+            android:id="@+id/action_usersListFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.example.network_db.screens.detail_user.UserDetailFragment"
+        android:label="UserDetailFragment"
+        tools:layout="@layout/fragment_user_detail">
+        <argument
+            android:name="uuid"
+            app:argType="string" />
+    </fragment>
 </navigation>

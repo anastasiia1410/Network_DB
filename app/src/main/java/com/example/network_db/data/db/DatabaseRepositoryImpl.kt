@@ -13,6 +13,10 @@ class DatabaseRepositoryImpl(private val userDao: UserDao) : DatabaseRepository 
         return userDao.getUsers().map { it.toUser() }
     }
 
+    override suspend fun getUserById(uuid: String): User {
+        return userDao.getUserById(uuid).toUser()
+    }
+
     override suspend fun clearTable() {
         userDao.clearTable()
     }

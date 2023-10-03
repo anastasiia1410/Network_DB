@@ -1,4 +1,4 @@
-package com.example.network_db.screens.list
+package com.example.network_db.screens.users
 
 import com.example.network_db.core.Reducer
 

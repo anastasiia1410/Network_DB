@@ -1,4 +1,4 @@
-package com.example.network_db.screens.list
+package com.example.network_db.screens.users
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +9,7 @@ import com.example.network_db.databinding.ItemUserBinding
 import com.example.network_db.screens.entity.User
 
 class UserListAdapter : ListAdapter<User, UserListAdapter.VH>(DiffCallback()) {
+    var onUserClick: ((uuid: String) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -17,14 +18,17 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.VH>(DiffCallback()) {
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, onUserClick)
     }
 
     class VH(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
+        fun bind(user: User, onUserClick: ((uuid: String) -> Unit)?) {
             with(binding) {
                 tvName.text = user.firstName
+                root.setOnClickListener {
+                    onUserClick?.invoke(user.uuid)
+                }
             }
         }
     }
