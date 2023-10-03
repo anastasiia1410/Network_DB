@@ -5,7 +5,7 @@ import com.example.network_db.data.network.Api
 import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.data.network.NetworkRepositoryImpl
 import com.example.network_db.screens.list.UserViewModel
-import com.example.network_db.screens.list.use_case.ShowListUseCase
+import com.example.network_db.screens.list.use_case.GetUsersUseCase
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,7 +32,8 @@ private val appModule = module {
     }
     single { get<Retrofit>().create(Api::class.java) }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
-    viewModel { UserViewModel(listOf(ShowListUseCase(get()))) }
+    single { GetUsersUseCase(get()) }
+    viewModel { UserViewModel(listOf(get<GetUsersUseCase>())) }
 }
 
 fun App.initKoin() {

@@ -5,7 +5,7 @@ import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.screens.list.UserEvents
 import com.example.network_db.screens.list.UserState
 
-class ShowListUseCase(private val networkRepository: NetworkRepository) : UseCase<UserEvents, UserState> {
+class GetUsersUseCase(private val networkRepository: NetworkRepository) : UseCase<UserEvents, UserState> {
     override fun canHandle(event: UserEvents): Boolean {
         return event is UserEvents.GetList
     }
