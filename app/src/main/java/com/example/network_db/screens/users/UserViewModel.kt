@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.network_db.core.BaseViewModel
 import com.example.network_db.core.UseCase
 import com.example.network_db.data.network.Api.Companion.DEFAULT_PAGE_SIZE
@@ -32,7 +33,9 @@ class UserViewModel(
         pagingSourceFactory = {
             pagingSource
         }, initialKey = 1
-    ).flow.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+    ).flow.cachedIn(viewModelScope)
+        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
 
     fun getList() {
         handleEvent(UserEvents.GetList)
