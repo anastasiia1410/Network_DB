@@ -1,6 +1,6 @@
 package com.example.network_db.data.network
 
-import com.example.network_db.data.network.entity.reponse.Response
+import com.example.network_db.data.network.entity.reponse.GetUsersResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,7 +10,7 @@ interface Api {
     suspend fun getUsers(
         @Query("page") page: Int = 1,
         @Query("results") results: Int = DEFAULT_PAGE_SIZE,
-    ): Response
+    ): GetUsersResponse
 
     companion object {
         const val DEFAULT_PAGE_SIZE = 20

@@ -36,13 +36,11 @@ class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.users.collect { users ->
+                viewModel.pager.collect { users ->
                     adapter.submitData(users)
                 }
             }
         }
-
-        viewModel.getList()
 
         adapter.onUserClick = {
             val action = UsersListFragmentDirections.actionUsersListFragmentToUserDetailFragment(it)

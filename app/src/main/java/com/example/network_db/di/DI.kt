@@ -12,7 +12,6 @@ import com.example.network_db.data.network.UsersPageSource
 import com.example.network_db.screens.detail_user.UserDetailViewModel
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
 import com.example.network_db.screens.users.UserViewModel
-import com.example.network_db.screens.users.use_case.GetUsersUseCase
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -44,10 +43,9 @@ private val appModule = module {
     }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
-    single { GetUsersUseCase(get(), get()) }
     single { GetDetailUserUseCase(get()) }
     single { UsersPageSource(get(), get()) }
-    viewModel { UserViewModel(listOf(get<GetUsersUseCase>()), get()) }
+    viewModel { UserViewModel(get()) }
     viewModel { UserDetailViewModel(listOf(get<GetDetailUserUseCase>())) }
 
 }

@@ -6,7 +6,8 @@ import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.data.network.entity.toUser
 import com.example.network_db.screens.entity.User
 
-class UsersPageSource(private val api: Api, private val databaseRepository: DatabaseRepository) : PagingSource<Int, User>() {
+class UsersPageSource(private val api: Api, private val databaseRepository: DatabaseRepository) :
+    PagingSource<Int, User>() {
     override fun getRefreshKey(state: PagingState<Int, User>): Int? {
         val anchorPosition = state.anchorPosition ?: return null
         val page = state.closestPageToPosition(anchorPosition) ?: return null
@@ -14,13 +15,25 @@ class UsersPageSource(private val api: Api, private val databaseRepository: Data
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
-        val page: Int = params.key ?: 1
-        val results: Int = params.loadSize
-        val response = api.getUsers(page, results)
-        val users = response.userList.map { it.toUser() }
-        databaseRepository.insert(users)
-        val nextKey = if (users.size < results) null else page.plus(1)
-        val prevKey = if (page == 1) null else page.minus(1)
-        return LoadResult.Page(users, prevKey, nextKey)
+        return try {
+            val page: Int = params.key ?: 1
+            val results: Int = params.loadSize
+            val response = api.getUsers(page, results)
+            val users = response.userList.map { it.toUser() }
+            if (page == 1) {
+                databaseRepository.clearTable()
+            }
+            databaseRepository.insert(users)
+            val nextKey = if (users.size < results) null else page.plus(1)
+            val prevKey = if (page == 1) null else page.minus(1)
+            LoadResult.Page(users, prevKey, nextKey)
+        } catch (e: Exception) {
+            val usersFromDb = databaseRepository.getUsers()
+            if (usersFromDb.isNotEmpty()) {
+                LoadResult.Page(usersFromDb, null, null)
+            } else {
+                LoadResult.Error(e)
+            }
+        }
     }
 }
