@@ -23,10 +23,11 @@ class UserViewModel(
         initialState = User.initialUsers()
     ) {
 
-    val users: StateFlow<PagingData<User>> = Pager(config = PagingConfig(
+    val users: StateFlow<PagingData<User>> = Pager(
+        config = PagingConfig(
             pageSize = DEFAULT_PAGE_SIZE,
             enablePlaceholders = false,
-            initialLoadSize = 2
+            initialLoadSize = DEFAULT_PAGE_SIZE * 3
         ),
         pagingSourceFactory = {
             pagingSource
