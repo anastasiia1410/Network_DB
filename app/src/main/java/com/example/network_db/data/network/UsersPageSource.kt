@@ -16,8 +16,9 @@ class UsersPageSource(private val api: Api, private val databaseRepository: Data
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
         return try {
-            val page: Int = params.key ?: 1
+            val page = params.key ?: 1
             val results: Int = params.loadSize
+
             val response = api.getUsers(page, results)
             val users = response.userList.map { it.toUser() }
             if (page == 1) {
@@ -28,11 +29,11 @@ class UsersPageSource(private val api: Api, private val databaseRepository: Data
             val prevKey = if (page == 1) null else page.minus(1)
             LoadResult.Page(users, prevKey, nextKey)
         } catch (e: Exception) {
-            val usersFromDb = databaseRepository.getUsers()
-            if (usersFromDb.isNotEmpty()) {
-                LoadResult.Page(usersFromDb, null, null)
+            return if (params.key != 1) {
+                LoadResult.Page(emptyList(), null, null)
             } else {
-                LoadResult.Error(e)
+                val usersFromDb = databaseRepository.getUsers()
+                LoadResult.Page(usersFromDb, null, null)
             }
         }
     }
