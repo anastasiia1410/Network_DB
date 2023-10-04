@@ -8,6 +8,7 @@ import com.example.network_db.data.db.DatabaseRepositoryImpl
 import com.example.network_db.data.network.Api
 import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.data.network.NetworkRepositoryImpl
+import com.example.network_db.data.network.UsersPageSource
 import com.example.network_db.screens.detail_user.UserDetailViewModel
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
 import com.example.network_db.screens.users.UserViewModel
@@ -45,7 +46,8 @@ private val appModule = module {
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single { GetUsersUseCase(get(), get()) }
     single { GetDetailUserUseCase(get()) }
-    viewModel { UserViewModel(listOf(get<GetUsersUseCase>())) }
+    single { UsersPageSource(get()) }
+    viewModel { UserViewModel(listOf(get<GetUsersUseCase>()), get()) }
     viewModel { UserDetailViewModel(listOf(get<GetDetailUserUseCase>())) }
 
 }

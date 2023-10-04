@@ -2,13 +2,13 @@ package com.example.network_db.screens.users
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.network_db.databinding.ItemUserBinding
 import com.example.network_db.screens.entity.User
 
-class UserListAdapter : ListAdapter<User, UserListAdapter.VH>(DiffCallback()) {
+class UserListAdapter : PagingDataAdapter<User, UserListAdapter.VH>(DiffCallback()) {
     var onUserClick: ((uuid: String) -> Unit)? = null
 
 
@@ -18,7 +18,7 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.VH>(DiffCallback()) {
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onUserClick)
+        holder.bind(item!!, onUserClick)
     }
 
     class VH(private val binding: ItemUserBinding) :

@@ -9,7 +9,7 @@ class UserReducer : Reducer<UserEvents, UserState> {
 
             UserEvents.GetList -> state
 
-            is UserEvents.ShowList -> state.copy(userList = event.userList)
+            is UserEvents.ShowList -> state.copy(userList = state.userList + event.userList)
         }
     }
 }

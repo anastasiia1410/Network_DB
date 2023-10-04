@@ -36,8 +36,8 @@ class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    adapter.submitList(state.userList)
+                viewModel.users.collect { users ->
+                    adapter.submitData(users)
                 }
             }
         }
