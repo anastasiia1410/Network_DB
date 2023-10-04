@@ -18,7 +18,9 @@ class GetUsersUseCase(
         return (event as? UserEvents.GetList)?.let {
             try {
                 val netUserList = networkRepository.getUsers()
-                databaseRepository.clearTable()
+                if(state.userList.isEmpty()){
+                    databaseRepository.clearTable()
+                }
                 databaseRepository.insert(netUserList)
                 return UserEvents.ShowList(netUserList)
             } catch (e: Exception) {

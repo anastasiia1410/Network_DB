@@ -18,7 +18,9 @@ class UserListAdapter : PagingDataAdapter<User, UserListAdapter.VH>(DiffCallback
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
-        holder.bind(item!!, onUserClick)
+        if (item != null) {
+            holder.bind(item, onUserClick)
+        }
     }
 
     class VH(private val binding: ItemUserBinding) :

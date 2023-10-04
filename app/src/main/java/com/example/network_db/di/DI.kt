@@ -46,7 +46,7 @@ private val appModule = module {
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single { GetUsersUseCase(get(), get()) }
     single { GetDetailUserUseCase(get()) }
-    single { UsersPageSource(get()) }
+    single { UsersPageSource(get(), get()) }
     viewModel { UserViewModel(listOf(get<GetUsersUseCase>()), get()) }
     viewModel { UserDetailViewModel(listOf(get<GetDetailUserUseCase>())) }
 
