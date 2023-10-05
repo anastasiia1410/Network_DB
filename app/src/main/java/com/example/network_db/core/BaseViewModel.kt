@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<Event, State>(
     private val useCases: List<UseCase<Event, State>>,
     private val reducer: Reducer<Event, State>,
-    initialState: State,
+    initialState: State
 ) : ViewModel() {
+
 
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<State>

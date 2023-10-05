@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.network_db.databinding.ItemUserBinding
 import com.example.network_db.screens.entity.User
 
-class UserListAdapter : PagingDataAdapter<User, UserListAdapter.VH>(DiffCallback()) {
-    var onUserClick: ((uuid: String) -> Unit)? = null
-
+class UserListAdapter(private val onUserClick: ((uuid: String) -> Unit)) : PagingDataAdapter<User, UserListAdapter.VH>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return VH(ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false))

@@ -18,9 +18,7 @@ class UsersPageSource(private val api: Api, private val databaseRepository: Data
         return try {
             val page = params.key ?: 1
             val results: Int = params.loadSize
-
-            val response = api.getUsers(page, results)
-            val users = response.userList.map { it.toUser() }
+            val users = api.getUsers(page, results).userList.map { it.toUser() }
             if (page == 1) {
                 databaseRepository.clearTable()
             }

@@ -16,7 +16,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
     private val viewModel by viewModel<UserViewModel>()
-    private val adapter by lazy { UserListAdapter() }
+    private val adapter by lazy { UserListAdapter {
+        val action = UsersListFragmentDirections.actionUsersListFragmentToUserDetailFragment(it)
+        findNavController().navigate(action)
+    }
+    }
 
 
     override fun createBinding(
@@ -41,12 +45,5 @@ class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
                 }
             }
         }
-
-        adapter.onUserClick = {
-            val action = UsersListFragmentDirections.actionUsersListFragmentToUserDetailFragment(it)
-            findNavController().navigate(action)
-        }
-
-
     }
 }
