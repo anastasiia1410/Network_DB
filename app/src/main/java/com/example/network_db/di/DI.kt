@@ -22,7 +22,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private val appModule = module {
+private val dataModule = module {
     single { GsonBuilder().serializeNulls().create() }
     single {
         OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
@@ -43,16 +43,21 @@ private val appModule = module {
     }
     single<NetworkRepository> { NetworkRepositoryImpl(get()) }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
-    single { GetDetailUserUseCase(get()) }
-    single { UsersPageSource(get(), get()) }
-    viewModel { UserViewModel(get()) }
-    viewModel { UserDetailViewModel(listOf(get<GetDetailUserUseCase>())) }
+}
 
+private val useCaseModule = module {
+    factory { GetDetailUserUseCase(get()) }
+    factory { UsersPageSource(get(), get()) }
+}
+
+private val viewModelModule = module {
+    viewModel { UserViewModel(get()) }
+    viewModel { (uuid: String) -> UserDetailViewModel(listOf(get<GetDetailUserUseCase>()), uuid) }
 }
 
 fun App.initKoin() {
     startKoin {
         androidContext(this@initKoin)
-        modules(appModule)
+        modules(dataModule, useCaseModule, viewModelModule)
     }
 }

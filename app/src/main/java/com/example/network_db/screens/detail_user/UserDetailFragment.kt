@@ -13,10 +13,12 @@ import com.example.network_db.databinding.FragmentUserDetailBinding
 import com.example.network_db.utils.loadImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>() {
-    private val viewModel by viewModel<UserDetailViewModel>()
     private val args by navArgs<UserDetailFragmentArgs>()
+    private val viewModel by viewModel<UserDetailViewModel>{ parametersOf(args.uuid) }
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,9 +29,6 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val uuid = args.uuid
-        viewModel.getUser(uuid)
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
