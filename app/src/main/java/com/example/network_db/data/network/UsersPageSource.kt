@@ -5,8 +5,12 @@ import androidx.paging.PagingState
 import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.data.network.entity.toUser
 import com.example.network_db.screens.entity.User
+import javax.inject.Inject
 
-class UsersPageSource(private val api: Api, private val databaseRepository: DatabaseRepository) :
+class UsersPageSource @Inject constructor(
+    private val api: Api,
+    private val databaseRepository: DatabaseRepository,
+) :
     PagingSource<Int, User>() {
     override fun getRefreshKey(state: PagingState<Int, User>): Int? {
         val anchorPosition = state.anchorPosition ?: return null

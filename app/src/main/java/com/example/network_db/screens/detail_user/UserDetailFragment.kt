@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -11,13 +12,17 @@ import androidx.navigation.fragment.navArgs
 import com.example.network_db.core.BaseFragment
 import com.example.network_db.databinding.FragmentUserDetailBinding
 import com.example.network_db.utils.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
+@AndroidEntryPoint
 class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>() {
     private val args by navArgs<UserDetailFragmentArgs>()
-    private val viewModel by viewModel<UserDetailViewModel>{ parametersOf(args.uuid) }
+    private val viewModel by lazy {
+        val viewModel: UserDetailViewModel by viewModels()
+        viewModel.getUser(args.uuid)
+        viewModel
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,

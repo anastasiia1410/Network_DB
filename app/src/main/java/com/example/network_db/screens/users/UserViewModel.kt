@@ -9,11 +9,14 @@ import androidx.paging.cachedIn
 import com.example.network_db.data.network.Api.Companion.DEFAULT_PAGE_SIZE
 import com.example.network_db.data.network.UsersPageSource
 import com.example.network_db.screens.entity.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class UserViewModel(private val pagingSource: UsersPageSource) : ViewModel() {
+@HiltViewModel
+class UserViewModel @Inject constructor(private val pagingSource: UsersPageSource) : ViewModel() {
 
     val pager: StateFlow<PagingData<User>> = Pager(
         config = PagingConfig(

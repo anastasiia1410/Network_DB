@@ -1,12 +1,7 @@
 package com.example.network_db.core
 
 import android.app.Application
-import com.example.network_db.di.initKoin
+import dagger.hilt.android.HiltAndroidApp
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        initKoin()
-    }
-}
+@HiltAndroidApp
+class App : Application()

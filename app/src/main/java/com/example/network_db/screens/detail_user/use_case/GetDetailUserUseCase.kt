@@ -4,8 +4,9 @@ import com.example.network_db.core.UseCase
 import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.screens.detail_user.DetailEvents
 import com.example.network_db.screens.detail_user.DetailState
+import javax.inject.Inject
 
-class GetDetailUserUseCase(private val databaseRepository: DatabaseRepository) :
+class GetDetailUserUseCase @Inject constructor(private val databaseRepository: DatabaseRepository) :
     UseCase<DetailEvents, DetailState> {
     override fun canHandle(event: DetailEvents): Boolean {
         return event is DetailEvents.GetUser
