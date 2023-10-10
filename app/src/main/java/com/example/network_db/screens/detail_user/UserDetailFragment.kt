@@ -14,15 +14,18 @@ import com.example.network_db.databinding.FragmentUserDetailBinding
 import com.example.network_db.utils.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>() {
     private val args by navArgs<UserDetailFragmentArgs>()
-    private val viewModel by lazy {
-        val viewModel: UserDetailViewModel by viewModels()
-        viewModel.getUser(args.uuid)
-        viewModel
+    @Inject
+    lateinit var factory: UserDetailViewModel.Factory
+
+    private val viewModel by viewModels<UserDetailViewModel> {
+        UserDetailViewModel.provideUserDetailViewModelFactory(factory, args.uuid)
     }
+
 
     override fun createBinding(
         inflater: LayoutInflater,
