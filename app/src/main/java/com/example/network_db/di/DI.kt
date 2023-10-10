@@ -12,6 +12,7 @@ import com.example.network_db.data.network.NetworkRepositoryImpl
 import com.example.network_db.data.network.UsersPageSource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,25 +53,29 @@ class DataModule {
     }
 
     @Provides
-    fun provideDb(@ApplicationContext context: Context): UserDao {
-        val db = Room.databaseBuilder(context, AppDatabase::class.java, "my_table.sqlite").build()
-        return db.userDao()
+    fun provideDb(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "my_table.sqlite").build()
     }
 
     @Provides
-    fun provideNetworkRepository(api: Api): NetworkRepository {
-        return NetworkRepositoryImpl(api)
-    }
-
-    @Provides
-    fun initDatabaseRepository(userDao: UserDao): DatabaseRepository {
-        return DatabaseRepositoryImpl(userDao)
+    fun provideDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
     }
 
     @Provides
     fun provideUsersPageSource(api: Api, databaseRepository: DatabaseRepository): UsersPageSource {
         return UsersPageSource(api, databaseRepository)
-
     }
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+interface Binds {
+
+    @Binds
+    fun bindDatabaseRepository(impl: DatabaseRepositoryImpl): DatabaseRepository
+
+    @Binds
+    fun bindNetworkRepository(impl: NetworkRepositoryImpl): NetworkRepository
 }
 
