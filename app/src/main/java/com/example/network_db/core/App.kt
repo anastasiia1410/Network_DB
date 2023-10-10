@@ -8,6 +8,8 @@ import com.example.network_db.di.ViewModelModule
 
 class App : Application() {
     lateinit var appComponent: AppComponent
+        private set
+
     override fun onCreate() {
         super.onCreate()
 
@@ -18,7 +20,7 @@ class App : Application() {
                 .build()
     }
 
-    companion object{
+    companion object {
         fun getInstance(context: Context): App = context.applicationContext as App
     }
 }

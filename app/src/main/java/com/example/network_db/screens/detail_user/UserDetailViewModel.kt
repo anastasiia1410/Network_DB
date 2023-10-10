@@ -4,9 +4,8 @@ import com.example.network_db.core.BaseViewModel
 import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
 import com.example.network_db.screens.entity.User
-import javax.inject.Inject
 
-class UserDetailViewModel @Inject constructor(
+class UserDetailViewModel (
     databaseRepository: DatabaseRepository,
     uuid: String,
 ) :
