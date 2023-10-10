@@ -12,7 +12,7 @@ import com.example.network_db.data.network.NetworkRepositoryImpl
 import com.example.network_db.data.network.UsersPageSource
 import com.example.network_db.screens.detail_user.UserDetailViewModelFactory
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
-import com.example.network_db.screens.users.UserViewModel
+import com.example.network_db.screens.users.UserListFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -94,7 +94,7 @@ class ViewModelModule(private val context: Context) {
     }
 
     @Provides
-    fun provideFactory(
+    fun provideUserDetailFactory(
         databaseRepository: DatabaseRepository,
         uuid: String,
     ): UserDetailViewModelFactory {
@@ -102,7 +102,7 @@ class ViewModelModule(private val context: Context) {
     }
 
     @Provides
-    fun provideUserViewModel(usersPageSource: UsersPageSource): UserViewModel {
-        return UserViewModel(usersPageSource)
+    fun provideUserListFactory(usersPageSource: UsersPageSource): UserListFactory {
+        return UserListFactory(usersPageSource)
     }
 }

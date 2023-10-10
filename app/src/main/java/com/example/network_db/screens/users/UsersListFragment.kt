@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 class UsersListFragment : BaseFragment<FragmentUserListBinding>() {
     @Inject
-    lateinit var viewModel: UserViewModel
+    lateinit var factory: UserListFactory
+    private val viewModel by viewModels<UserViewModel> { factory }
     private val adapter by lazy {
         UserListAdapter {
             val action = UsersListFragmentDirections.actionUsersListFragmentToUserDetailFragment(it)

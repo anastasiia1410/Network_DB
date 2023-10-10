@@ -5,7 +5,7 @@ import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
 import com.example.network_db.screens.entity.User
 
-class UserDetailViewModel (
+class UserDetailViewModel(
     databaseRepository: DatabaseRepository,
     uuid: String,
 ) :
@@ -23,6 +23,7 @@ class UserDetailViewModel (
         handleEvent(DetailEvents.GetUser(uuid))
     }
 }
+
 
 
 
