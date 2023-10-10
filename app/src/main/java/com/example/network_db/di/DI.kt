@@ -1,63 +1,102 @@
 package com.example.network_db.di
 
+import android.content.Context
 import androidx.room.Room
-import com.example.network_db.core.App
 import com.example.network_db.data.db.AppDatabase
 import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.data.db.DatabaseRepositoryImpl
+import com.example.network_db.data.db.UserDao
 import com.example.network_db.data.network.Api
 import com.example.network_db.data.network.NetworkRepository
 import com.example.network_db.data.network.NetworkRepositoryImpl
 import com.example.network_db.data.network.UsersPageSource
-import com.example.network_db.screens.detail_user.UserDetailViewModel
+import com.example.network_db.screens.detail_user.UserDetailViewModelFactory
 import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
-import com.example.network_db.screens.users.UserViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import dagger.Module
+import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private val dataModule = module {
-    single { GsonBuilder().serializeNulls().create() }
-    single {
-        OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+@Module
+class DataModule {
+
+    @Provides
+    fun provideGson(): Gson {
+        return GsonBuilder().serializeNulls().create()
+    }
+
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }).build()
     }
-    single {
-        Retrofit.Builder()
+
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
+        return Retrofit.Builder()
             .baseUrl("https://randomuser.me/")
-            .client(get())
-            .addConverterFactory(GsonConverterFactory.create(get()))
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
-    single { get<Retrofit>().create(Api::class.java) }
-    single {
-        val db = Room.databaseBuilder(get(), AppDatabase::class.java, "my_table.sqlite").build()
-        db.userDao()
+
+    @Provides
+    fun provideApi(retrofit: Retrofit): Api {
+        return retrofit.create(Api::class.java)
     }
-    single<NetworkRepository> { NetworkRepositoryImpl(get()) }
-    single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
+
+    @Provides
+    fun provideDb(context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "my_table.sqlite").build()
+    }
+
+    @Provides
+    fun provideDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
+    }
+
+    @Provides
+    fun provideUsersPageSource(api: Api, databaseRepository: DatabaseRepository): UsersPageSource {
+        return UsersPageSource(api, databaseRepository)
+    }
+
+    @Provides
+    fun provideDatabaseRepository(impl: DatabaseRepositoryImpl): DatabaseRepository {
+        return impl
+    }
+
+    @Provides
+    fun provideNetworkRepository(impl: NetworkRepositoryImpl): NetworkRepository {
+        return impl
+    }
 }
 
-private val useCaseModule = module {
-    factory { GetDetailUserUseCase(get()) }
-    factory { UsersPageSource(get(), get()) }
+@Module
+class UseCaseModule {
+    @Provides
+    fun provideGetDetailUserUseCase(databaseRepository: DatabaseRepository): GetDetailUserUseCase {
+        return GetDetailUserUseCase(databaseRepository)
+    }
 }
 
-private val viewModelModule = module {
-    viewModel { UserViewModel(get()) }
-    viewModel { (uuid: String) -> UserDetailViewModel(listOf(get<GetDetailUserUseCase>()), uuid) }
-}
+@Module
+class ViewModelModule(private val context: Context) {
 
-fun App.initKoin() {
-    startKoin {
-        androidContext(this@initKoin)
-        modules(dataModule, useCaseModule, viewModelModule)
+    @Provides
+    fun provideContext(): Context {
+        return context
+    }
+
+    @Provides
+    fun provideFactory(
+        databaseRepository: DatabaseRepository,
+        uuid: String,
+    ): UserDetailViewModelFactory {
+        return UserDetailViewModelFactory(databaseRepository, uuid)
     }
 }

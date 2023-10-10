@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
     id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -58,7 +58,9 @@ dependencies {
     def nav_version = "2.6.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation 'io.insert-koin:koin-android:3.4.2'
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.48.1'
+    kapt 'com.google.dagger:dagger-compiler:2.48.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     //Room
     def room_version = "2.5.2"

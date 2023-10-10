@@ -12,8 +12,9 @@ import com.example.network_db.screens.entity.User
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class UserViewModel(private val pagingSource: UsersPageSource) : ViewModel() {
+class UserViewModel @Inject constructor(private val pagingSource: UsersPageSource) : ViewModel() {
 
     val pager: StateFlow<PagingData<User>> = Pager(
         config = PagingConfig(
@@ -27,3 +28,4 @@ class UserViewModel(private val pagingSource: UsersPageSource) : ViewModel() {
     ).flow.cachedIn(viewModelScope)
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 }
+

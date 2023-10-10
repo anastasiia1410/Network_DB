@@ -1,12 +1,17 @@
 package com.example.network_db.screens.detail_user
 
 import com.example.network_db.core.BaseViewModel
-import com.example.network_db.core.UseCase
+import com.example.network_db.data.db.DatabaseRepository
+import com.example.network_db.screens.detail_user.use_case.GetDetailUserUseCase
 import com.example.network_db.screens.entity.User
+import javax.inject.Inject
 
-class UserDetailViewModel(useCase: List<UseCase<DetailEvents, DetailState>>, uuid : String) :
+class UserDetailViewModel @Inject constructor(
+    databaseRepository: DatabaseRepository,
+    uuid: String,
+) :
     BaseViewModel<DetailEvents, DetailState>(
-        useCases = useCase,
+        useCases = listOf(GetDetailUserUseCase(databaseRepository)),
         reducer = DetailReducer(),
         initialState = User.initialUser()
     ) {
@@ -15,7 +20,10 @@ class UserDetailViewModel(useCase: List<UseCase<DetailEvents, DetailState>>, uui
         getUser(uuid)
     }
 
-   private fun getUser(uuid: String) {
+    private fun getUser(uuid: String) {
         handleEvent(DetailEvents.GetUser(uuid))
     }
 }
+
+
+

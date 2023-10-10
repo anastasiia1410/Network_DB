@@ -1,23 +1,38 @@
 package com.example.network_db.screens.detail_user
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import com.example.network_db.core.App
 import com.example.network_db.core.BaseFragment
+import com.example.network_db.data.db.DatabaseRepository
 import com.example.network_db.databinding.FragmentUserDetailBinding
 import com.example.network_db.utils.loadImage
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import javax.inject.Inject
 
 class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>() {
     private val args by navArgs<UserDetailFragmentArgs>()
-    private val viewModel by viewModel<UserDetailViewModel>{ parametersOf(args.uuid) }
+
+    @Inject
+    lateinit var databaseRepository: DatabaseRepository
+
+    private val viewModel by viewModels<UserDetailViewModel> {
+        UserDetailViewModelFactory(databaseRepository, args.uuid)
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        App.getInstance(context).appComponent.injectUserDetailFragment(this)
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
